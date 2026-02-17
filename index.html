@@ -17,13 +17,9 @@ body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;o
 
 .video-wrap{flex:1;position:relative;background:#000;overflow:hidden}
 #vid{width:100%;height:100%;object-fit:contain;display:block}
-
 .v-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 40%,transparent 75%,rgba(0,0,0,.25) 100%);pointer-events:none}
-
 .watermark{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(230,57,70,.12);border:1px solid rgba(230,57,70,.25);color:rgba(230,57,70,.65);padding:3px 14px;border-radius:3px;font-size:10px;font-weight:800;letter-spacing:3px;pointer-events:none}
-
 .n-indicator{position:absolute;top:14px;right:14px;background:rgba(230,57,70,.88);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.5px}
-
 .vc-indicator{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.65);padding:5px 14px;border-radius:20px;font-size:11px;color:#bbb;display:none}
 
 .tts-pill{position:absolute;bottom:130px;right:16px;background:rgba(0,0,0,.7);border:1px solid #333;border-radius:20px;padding:5px 14px;font-size:11px;color:#888;display:none;align-items:center;gap:7px}
@@ -33,15 +29,12 @@ body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;o
 @keyframes wv{0%,100%{height:3px}50%{height:12px}}
 
 .bottom{position:absolute;bottom:0;left:0;right:0;padding:0 20px 18px}
-
 .news-box{background:rgba(8,8,28,.93);border-left:4px solid #e63946;padding:14px 18px;border-radius:8px;margin-bottom:14px;backdrop-filter:blur(8px)}
 .news-box .nb-label{font-size:9px;font-weight:800;color:#e63946;letter-spacing:3px;margin-bottom:5px}
 .news-box .nb-text{font-size:16px;font-weight:600;line-height:1.5;color:#fff}
-
 .ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .cg{display:flex;align-items:center;gap:10px}
-
-.cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:all .2s;backdrop-filter:blur(4px);display:flex;align-items:center;gap:7px}
+.cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:all .2s;backdrop-filter:blur(4px)}
 .cbtn:hover{background:rgba(255,255,255,.2)}
 .cbtn:disabled{opacity:.25;cursor:not-allowed}
 .cbtn.red{background:rgba(230,57,70,.8);border-color:#e63946;padding:10px 30px}
@@ -49,11 +42,50 @@ body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;o
 .mute-cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:18px;transition:all .2s}
 .mute-cbtn:hover{background:rgba(255,255,255,.2)}
 
-.no-news{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#050512;color:#333;text-align:center}
+.no-news{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#050512;color:#333;text-align:center;z-index:5}
 .no-news .ni{font-size:60px;margin-bottom:14px}
 .no-news h2{font-size:18px;margin-bottom:6px;color:#444}
 .no-news p{font-size:13px}
 .no-news a{color:#e63946;text-decoration:none;font-weight:700}
+
+/* ===== START OVERLAY ===== */
+.start-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:20;
+  backdrop-filter:blur(6px);
+  cursor:pointer;
+}
+.start-overlay .so-logo{
+  background:#e63946;color:#fff;
+  font-weight:900;font-size:13px;
+  padding:6px 18px;border-radius:4px;
+  letter-spacing:3px;margin-bottom:24px;
+}
+.start-overlay h2{
+  font-size:26px;font-weight:800;
+  margin-bottom:10px;color:#fff;
+}
+.start-overlay p{
+  font-size:14px;color:#888;margin-bottom:36px;
+}
+.start-btn{
+  background:linear-gradient(135deg,#e63946,#c62828);
+  color:#fff;border:none;
+  padding:16px 48px;border-radius:50px;
+  font-size:18px;font-weight:800;
+  cursor:pointer;letter-spacing:1px;
+  box-shadow:0 8px 32px rgba(230,57,70,.5);
+  transition:all .2s;
+  animation:pulse 2s infinite;
+}
+.start-btn:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(230,57,70,.7)}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(230,57,70,.5)}50%{box-shadow:0 8px 48px rgba(230,57,70,.8)}}
+.start-overlay .so-hint{
+  margin-top:20px;font-size:12px;color:#444;
+}
 </style>
 </head>
 <body>
@@ -76,15 +108,24 @@ body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;o
   </div>
 
   <!-- Empty State -->
-  <div class="no-news" id="noNews">
+  <div class="no-news" id="noNews" style="display:none">
     <div class="ni">📺</div>
     <h2>Koi News Nahi Mili</h2>
     <p><a href="admin.html">Admin Panel</a> mein news add karein.</p>
   </div>
 
+  <!-- ===== START OVERLAY ===== -->
+  <div class="start-overlay" id="startOverlay" onclick="startBroadcast()">
+    <div class="so-logo">BREAKING NEWS</div>
+    <h2>📺 Live Broadcast</h2>
+    <p>Video aur TTS shuru karne ke liye click karein</p>
+    <button class="start-btn">▶ START BROADCAST</button>
+    <div class="so-hint">Broadcast shuru karne ke liye screen par kahi bhi click karein</div>
+  </div>
+
   <!-- Bottom Controls -->
   <div class="bottom">
-    <div class="news-box" id="newsBox">
+    <div class="news-box">
       <div class="nb-label">BREAKING NEWS</div>
       <div class="nb-text" id="nbText">Loading...</div>
     </div>
@@ -103,45 +144,96 @@ body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;o
 </div>
 
 <script>
-let items=[], cur=0, vcur=0, muted=false, ttsPlayed=false, synth=window.speechSynthesis;
+let items=[], cur=0, vcur=0, muted=false, ttsPlayed=false;
+let synth=window.speechSynthesis;
+let broadcastStarted=false;
 
-window.onload=()=>{ loadNews(); setInterval(loadNews,30000); };
+window.onload=()=>{
+  loadNews();
+  setInterval(loadNews, 30000);
+};
 
 function loadNews(){
   const s=localStorage.getItem('bn_news');
   if(s){
     const d=JSON.parse(s);
     if(d.length){
-      const wasEmpty=!items.length;
       items=d;
       document.getElementById('noNews').style.display='none';
       if(cur>=items.length) cur=0;
-      if(wasEmpty) renderCurrent();
-      else{ document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`; updateNav(); }
-    } else { document.getElementById('noNews').style.display='flex'; }
-  } else { document.getElementById('noNews').style.display='flex'; }
+      // Sirf UI update karo — play mat karo jab tak START na ho
+      updateTickerAndText();
+      updateNav();
+    } else {
+      document.getElementById('noNews').style.display='flex';
+    }
+  } else {
+    document.getElementById('noNews').style.display='flex';
+  }
+}
+
+function updateTickerAndText(){
+  if(!items.length) return;
+  const it=items[cur];
+  document.getElementById('ticker').textContent=it.text;
+  document.getElementById('nbText').textContent=it.text;
+  document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`;
+}
+
+// ===== START BROADCAST — User click ke baad =====
+function startBroadcast(){
+  if(broadcastStarted) return;
+  broadcastStarted=true;
+
+  // Overlay hatao
+  document.getElementById('startOverlay').style.display='none';
+
+  if(!items.length){
+    document.getElementById('noNews').style.display='flex';
+    return;
+  }
+
+  renderCurrent();
 }
 
 function renderCurrent(){
   if(!items.length) return;
   const it=items[cur];
   vcur=0; ttsPlayed=false;
+
   document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`;
   document.getElementById('ticker').textContent=it.text;
   document.getElementById('nbText').textContent=it.text;
   updateNav();
-  // Video counter
+
   const vc=document.getElementById('vcInd');
-  if(it.videos.length>1){ vc.style.display='block'; vc.textContent=`VIDEO 1 / ${it.videos.length}`; }
-  else vc.style.display='none';
+  if(it.videos.length>1){
+    vc.style.display='block';
+    vc.textContent=`VIDEO 1 / ${it.videos.length}`;
+  } else {
+    vc.style.display='none';
+  }
+
   loadVid(it.videos[0].url);
   playTTS(it.text);
 }
 
 function loadVid(url){
   const v=document.getElementById('vid');
-  v.src=url; v.muted=muted; v.load();
-  v.oncanplay=()=>v.play().catch(()=>{});
+  v.src=url;
+  v.muted=muted;
+  v.load();
+  v.oncanplay=()=>{
+    const p=v.play();
+    if(p!==undefined){
+      p.catch(err=>{
+        console.log('Play blocked:', err);
+        // Muted karke try karo as fallback
+        v.muted=true;
+        v.play().catch(()=>{});
+      });
+    }
+  };
   v.onended=()=>{
     const it=items[cur];
     if(vcur<it.videos.length-1){
@@ -149,6 +241,9 @@ function loadVid(url){
       document.getElementById('vcInd').textContent=`VIDEO ${vcur+1} / ${it.videos.length}`;
       loadVid(it.videos[vcur].url);
     }
+  };
+  v.onerror=(e)=>{
+    console.error('Video error:', e);
   };
 }
 
@@ -158,33 +253,59 @@ function toggleMute(){
   document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
 }
 
-function nextNews(){ if(cur<items.length-1){ cur++; stopTTS(); renderCurrent(); } }
-function prevNews(){ if(cur>0){ cur--; stopTTS(); renderCurrent(); } }
+function nextNews(){
+  if(cur<items.length-1){
+    cur++;
+    stopTTS();
+    renderCurrent();
+  }
+}
+
+function prevNews(){
+  if(cur>0){
+    cur--;
+    stopTTS();
+    renderCurrent();
+  }
+}
 
 function updateNav(){
   document.getElementById('prevBtn').disabled=cur===0;
   document.getElementById('nextBtn').textContent=cur<items.length-1?'NEXT ▶':'END';
 }
 
-function detectLang(t){ return /[\u0900-\u097F]/.test(t)?'hi-IN':'en-US'; }
+function detectLang(t){
+  return /[\u0900-\u097F]/.test(t)?'hi-IN':'en-US';
+}
 
 function playTTS(text){
   if(ttsPlayed||!synth) return;
   stopTTS();
   setTimeout(()=>{
     const u=new SpeechSynthesisUtterance(text);
-    u.lang=detectLang(text); u.rate=0.9; u.pitch=1; u.volume=1;
+    u.lang=detectLang(text);
+    u.rate=0.9; u.pitch=1; u.volume=1;
     const voices=synth.getVoices();
     const v=voices.find(x=>x.lang===u.lang)||voices.find(x=>x.lang.startsWith(u.lang.split('-')[0]));
     if(v) u.voice=v;
-    u.onstart=()=>{ ttsPlayed=true; const p=document.getElementById('ttsPill'); p.style.display='flex'; document.getElementById('ttsLbl').textContent=u.lang==='hi-IN'?'Hindi TTS...':'English TTS...'; };
+    u.onstart=()=>{
+      ttsPlayed=true;
+      const p=document.getElementById('ttsPill');
+      p.style.display='flex';
+      document.getElementById('ttsLbl').textContent=u.lang==='hi-IN'?'Hindi TTS...':'English TTS...';
+    };
     u.onend=()=>document.getElementById('ttsPill').style.display='none';
     u.onerror=()=>document.getElementById('ttsPill').style.display='none';
-    synth.speak(u); ttsPlayed=true;
-  },800);
+    synth.speak(u);
+    ttsPlayed=true;
+  }, 800);
 }
 
-function stopTTS(){ if(synth&&synth.speaking) synth.cancel(); document.getElementById('ttsPill').style.display='none'; }
+function stopTTS(){
+  if(synth&&synth.speaking) synth.cancel();
+  document.getElementById('ttsPill').style.display='none';
+}
+
 if(synth) synth.onvoiceschanged=()=>{};
 </script>
 </body>
