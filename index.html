@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breaking News — Live Broadcast</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+.top-bar{background:#e63946;padding:7px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;z-index:10}
+.brk-label{background:#fff;color:#e63946;font-weight:900;font-size:10px;padding:3px 10px;border-radius:3px;letter-spacing:2px;flex-shrink:0}
+.ticker{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.25);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
+.ldot{width:7px;height:7px;border-radius:50%;background:#fff;animation:ld 1s infinite}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:0}}
+
+.video-wrap{flex:1;position:relative;background:#000;overflow:hidden}
+#vid{width:100%;height:100%;object-fit:contain;display:block}
+
+.v-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 40%,transparent 75%,rgba(0,0,0,.25) 100%);pointer-events:none}
+
+.watermark{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(230,57,70,.12);border:1px solid rgba(230,57,70,.25);color:rgba(230,57,70,.65);padding:3px 14px;border-radius:3px;font-size:10px;font-weight:800;letter-spacing:3px;pointer-events:none}
+
+.n-indicator{position:absolute;top:14px;right:14px;background:rgba(230,57,70,.88);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.5px}
+
+.vc-indicator{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.65);padding:5px 14px;border-radius:20px;font-size:11px;color:#bbb;display:none}
+
+.tts-pill{position:absolute;bottom:130px;right:16px;background:rgba(0,0,0,.7);border:1px solid #333;border-radius:20px;padding:5px 14px;font-size:11px;color:#888;display:none;align-items:center;gap:7px}
+.tts-wave{display:flex;gap:2px;align-items:center;height:12px}
+.tw{width:3px;background:#e63946;border-radius:3px;animation:wv .8s infinite}
+.tw:nth-child(2){animation-delay:.15s}.tw:nth-child(3){animation-delay:.3s}
+@keyframes wv{0%,100%{height:3px}50%{height:12px}}
+
+.bottom{position:absolute;bottom:0;left:0;right:0;padding:0 20px 18px}
+
+.news-box{background:rgba(8,8,28,.93);border-left:4px solid #e63946;padding:14px 18px;border-radius:8px;margin-bottom:14px;backdrop-filter:blur(8px)}
+.news-box .nb-label{font-size:9px;font-weight:800;color:#e63946;letter-spacing:3px;margin-bottom:5px}
+.news-box .nb-text{font-size:16px;font-weight:600;line-height:1.5;color:#fff}
+
+.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.cg{display:flex;align-items:center;gap:10px}
+
+.cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:all .2s;backdrop-filter:blur(4px);display:flex;align-items:center;gap:7px}
+.cbtn:hover{background:rgba(255,255,255,.2)}
+.cbtn:disabled{opacity:.25;cursor:not-allowed}
+.cbtn.red{background:rgba(230,57,70,.8);border-color:#e63946;padding:10px 30px}
+.cbtn.red:hover{background:rgba(230,57,70,1)}
+.mute-cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:18px;transition:all .2s}
+.mute-cbtn:hover{background:rgba(255,255,255,.2)}
+
+.no-news{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#050512;color:#333;text-align:center}
+.no-news .ni{font-size:60px;margin-bottom:14px}
+.no-news h2{font-size:18px;margin-bottom:6px;color:#444}
+.no-news p{font-size:13px}
+.no-news a{color:#e63946;text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="brk-label">BREAKING NEWS</div>
+  <div class="ticker" id="ticker">Loading...</div>
+  <div class="live-pill"><div class="ldot"></div>LIVE</div>
+</div>
+
+<div class="video-wrap">
+  <video id="vid" playsinline></video>
+  <div class="v-overlay"></div>
+  <div class="watermark">BREAKING NEWS</div>
+  <div class="n-indicator" id="nInd">— / —</div>
+  <div class="vc-indicator" id="vcInd">VIDEO 1 / 1</div>
+  <div class="tts-pill" id="ttsPill">
+    <div class="tts-wave"><div class="tw"></div><div class="tw"></div><div class="tw"></div></div>
+    <span id="ttsLbl">TTS...</span>
+  </div>
+
+  <!-- Empty State -->
+  <div class="no-news" id="noNews">
+    <div class="ni">📺</div>
+    <h2>Koi News Nahi Mili</h2>
+    <p><a href="admin.html">Admin Panel</a> mein news add karein.</p>
+  </div>
+
+  <!-- Bottom Controls -->
+  <div class="bottom">
+    <div class="news-box" id="newsBox">
+      <div class="nb-label">BREAKING NEWS</div>
+      <div class="nb-text" id="nbText">Loading...</div>
+    </div>
+    <div class="ctrl-row">
+      <div class="cg">
+        <button class="cbtn" id="prevBtn" onclick="prevNews()" disabled>◀ PREV</button>
+      </div>
+      <div class="cg">
+        <button class="mute-cbtn" id="muteBtn" onclick="toggleMute()">🔊</button>
+      </div>
+      <div class="cg">
+        <button class="cbtn red" id="nextBtn" onclick="nextNews()">NEXT ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let items=[], cur=0, vcur=0, muted=false, ttsPlayed=false, synth=window.speechSynthesis;
+
+window.onload=()=>{ loadNews(); setInterval(loadNews,30000); };
+
+function loadNews(){
+  const s=localStorage.getItem('bn_news');
+  if(s){
+    const d=JSON.parse(s);
+    if(d.length){
+      const wasEmpty=!items.length;
+      items=d;
+      document.getElementById('noNews').style.display='none';
+      if(cur>=items.length) cur=0;
+      if(wasEmpty) renderCurrent();
+      else{ document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`; updateNav(); }
+    } else { document.getElementById('noNews').style.display='flex'; }
+  } else { document.getElementById('noNews').style.display='flex'; }
+}
+
+function renderCurrent(){
+  if(!items.length) return;
+  const it=items[cur];
+  vcur=0; ttsPlayed=false;
+  document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`;
+  document.getElementById('ticker').textContent=it.text;
+  document.getElementById('nbText').textContent=it.text;
+  updateNav();
+  // Video counter
+  const vc=document.getElementById('vcInd');
+  if(it.videos.length>1){ vc.style.display='block'; vc.textContent=`VIDEO 1 / ${it.videos.length}`; }
+  else vc.style.display='none';
+  loadVid(it.videos[0].url);
+  playTTS(it.text);
+}
+
+function loadVid(url){
+  const v=document.getElementById('vid');
+  v.src=url; v.muted=muted; v.load();
+  v.oncanplay=()=>v.play().catch(()=>{});
+  v.onended=()=>{
+    const it=items[cur];
+    if(vcur<it.videos.length-1){
+      vcur++;
+      document.getElementById('vcInd').textContent=`VIDEO ${vcur+1} / ${it.videos.length}`;
+      loadVid(it.videos[vcur].url);
+    }
+  };
+}
+
+function toggleMute(){
+  muted=!muted;
+  document.getElementById('vid').muted=muted;
+  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+}
+
+function nextNews(){ if(cur<items.length-1){ cur++; stopTTS(); renderCurrent(); } }
+function prevNews(){ if(cur>0){ cur--; stopTTS(); renderCurrent(); } }
+
+function updateNav(){
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').textContent=cur<items.length-1?'NEXT ▶':'END';
+}
+
+function detectLang(t){ return /[\u0900-\u097F]/.test(t)?'hi-IN':'en-US'; }
+
+function playTTS(text){
+  if(ttsPlayed||!synth) return;
+  stopTTS();
+  setTimeout(()=>{
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang=detectLang(text); u.rate=0.9; u.pitch=1; u.volume=1;
+    const voices=synth.getVoices();
+    const v=voices.find(x=>x.lang===u.lang)||voices.find(x=>x.lang.startsWith(u.lang.split('-')[0]));
+    if(v) u.voice=v;
+    u.onstart=()=>{ ttsPlayed=true; const p=document.getElementById('ttsPill'); p.style.display='flex'; document.getElementById('ttsLbl').textContent=u.lang==='hi-IN'?'Hindi TTS...':'English TTS...'; };
+    u.onend=()=>document.getElementById('ttsPill').style.display='none';
+    u.onerror=()=>document.getElementById('ttsPill').style.display='none';
+    synth.speak(u); ttsPlayed=true;
+  },800);
+}
+
+function stopTTS(){ if(synth&&synth.speaking) synth.cancel(); document.getElementById('ttsPill').style.display='none'; }
+if(synth) synth.onvoiceschanged=()=>{};
+</script>
+</body>
+</html>
