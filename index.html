@@ -8,253 +8,548 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',sans-serif;background:#000;color:#fff;height:100vh;overflow:hidden;display:flex;flex-direction:column}
 
-.top-bar{background:#e63946;padding:7px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;z-index:10}
-.brk-label{background:#fff;color:#e63946;font-weight:900;font-size:10px;padding:3px 10px;border-radius:3px;letter-spacing:2px;flex-shrink:0}
-.ticker{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.live-pill{display:flex;align-items:center;gap:5px;background:rgba(0,0,0,.25);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;flex-shrink:0}
+/* ── TOP BAR ── */
+.top-bar{
+  background:linear-gradient(90deg,#1a0000,#0d0d0d);
+  border-bottom:2px solid #e63946;
+  padding:8px 18px;
+  display:flex;align-items:center;gap:14px;
+  flex-shrink:0;z-index:10;
+}
+.brk-label{
+  background:#e63946;color:#fff;
+  font-weight:900;font-size:11px;
+  padding:4px 12px;border-radius:3px;
+  letter-spacing:2px;flex-shrink:0;
+}
+.channel-name{
+  font-size:15px;font-weight:800;
+  color:#fff;letter-spacing:1px;
+  flex-shrink:0;
+}
+.spacer{flex:1}
+.time-display{
+  font-size:13px;font-weight:700;
+  color:#ccc;font-family:monospace;
+  flex-shrink:0;
+}
+.live-pill{
+  display:flex;align-items:center;gap:6px;
+  background:#e63946;
+  padding:4px 12px;border-radius:20px;
+  font-size:11px;font-weight:800;
+  letter-spacing:1px;flex-shrink:0;
+}
 .ldot{width:7px;height:7px;border-radius:50%;background:#fff;animation:ld 1s infinite}
 @keyframes ld{0%,100%{opacity:1}50%{opacity:0}}
 
+/* ── VIDEO AREA ── */
 .video-wrap{flex:1;position:relative;background:#000;overflow:hidden}
 #vid{width:100%;height:100%;object-fit:contain;display:block}
-.v-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 40%,transparent 75%,rgba(0,0,0,.25) 100%);pointer-events:none}
-.watermark{position:absolute;top:14px;left:50%;transform:translateX(-50%);background:rgba(230,57,70,.12);border:1px solid rgba(230,57,70,.25);color:rgba(230,57,70,.65);padding:3px 14px;border-radius:3px;font-size:10px;font-weight:800;letter-spacing:3px;pointer-events:none}
-.n-indicator{position:absolute;top:14px;right:14px;background:rgba(230,57,70,.88);padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.5px}
-.vc-indicator{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.65);padding:5px 14px;border-radius:20px;font-size:11px;color:#bbb;display:none}
 
-.tts-pill{position:absolute;bottom:130px;right:16px;background:rgba(0,0,0,.7);border:1px solid #333;border-radius:20px;padding:5px 14px;font-size:11px;color:#888;display:none;align-items:center;gap:7px}
+/* subtle vignette only — no heavy overlay */
+.vignette{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 25%),
+    linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 20%);
+  pointer-events:none;
+}
+
+/* ── WATERMARK ── */
+.watermark{
+  position:absolute;top:12px;left:50%;
+  transform:translateX(-50%);
+  background:rgba(230,57,70,.1);
+  border:1px solid rgba(230,57,70,.2);
+  color:rgba(255,255,255,.35);
+  padding:3px 14px;border-radius:3px;
+  font-size:10px;font-weight:800;letter-spacing:3px;
+  pointer-events:none;
+}
+
+/* ── NEWS COUNTER ── */
+.n-indicator{
+  position:absolute;top:12px;right:14px;
+  background:rgba(0,0,0,.7);
+  border:1px solid rgba(230,57,70,.5);
+  padding:5px 14px;border-radius:20px;
+  font-size:12px;font-weight:700;
+  color:#fff;
+}
+
+/* ── VIDEO COUNTER ── */
+.vc-indicator{
+  position:absolute;top:12px;left:14px;
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,255,255,.1);
+  padding:5px 14px;border-radius:20px;
+  font-size:11px;color:#aaa;display:none;
+}
+
+/* ── TTS PILL ── */
+.tts-pill{
+  position:absolute;top:52px;right:14px;
+  background:rgba(230,57,70,.15);
+  border:1px solid rgba(230,57,70,.4);
+  border-radius:20px;padding:5px 14px;
+  font-size:11px;color:#ff8888;
+  display:none;align-items:center;gap:7px;
+}
 .tts-wave{display:flex;gap:2px;align-items:center;height:12px}
-.tw{width:3px;background:#e63946;border-radius:3px;animation:wv .8s infinite}
-.tw:nth-child(2){animation-delay:.15s}.tw:nth-child(3){animation-delay:.3s}
+.tw{width:3px;background:#e63946;border-radius:3px;animation:wv .7s infinite}
+.tw:nth-child(2){animation-delay:.15s}
+.tw:nth-child(3){animation-delay:.3s}
 @keyframes wv{0%,100%{height:3px}50%{height:12px}}
 
-.bottom{position:absolute;bottom:0;left:0;right:0;padding:0 20px 18px}
-.news-box{background:rgba(8,8,28,.93);border-left:4px solid #e63946;padding:14px 18px;border-radius:8px;margin-bottom:14px;backdrop-filter:blur(8px)}
-.news-box .nb-label{font-size:9px;font-weight:800;color:#e63946;letter-spacing:3px;margin-bottom:5px}
-.news-box .nb-text{font-size:16px;font-weight:600;line-height:1.5;color:#fff}
-.ctrl-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.cg{display:flex;align-items:center;gap:10px}
-.cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;transition:all .2s;backdrop-filter:blur(4px)}
-.cbtn:hover{background:rgba(255,255,255,.2)}
-.cbtn:disabled{opacity:.25;cursor:not-allowed}
-.cbtn.red{background:rgba(230,57,70,.8);border-color:#e63946;padding:10px 30px}
+/* ── LOOP INDICATOR ── */
+.loop-pill{
+  position:absolute;top:52px;left:14px;
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,255,255,.1);
+  padding:5px 14px;border-radius:20px;
+  font-size:11px;color:#666;
+}
+
+/* ── CONTROLS BAR ── */
+.ctrl-bar{
+  position:absolute;bottom:54px;
+  left:0;right:0;
+  padding:0 20px;
+  display:flex;align-items:center;
+  justify-content:space-between;gap:12px;
+}
+
+.ctrl-group{display:flex;align-items:center;gap:8px}
+
+.cbtn{
+  background:rgba(20,20,40,.85);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;padding:9px 18px;
+  border-radius:8px;cursor:pointer;
+  font-size:13px;font-weight:700;
+  transition:all .2s;
+  backdrop-filter:blur(8px);
+  white-space:nowrap;
+}
+.cbtn:hover{background:rgba(60,60,100,.9);border-color:rgba(255,255,255,.3)}
+.cbtn:disabled{opacity:.2;cursor:not-allowed}
+
+.cbtn.red{
+  background:rgba(200,30,40,.85);
+  border-color:#e63946;padding:9px 28px;
+}
 .cbtn.red:hover{background:rgba(230,57,70,1)}
-.mute-cbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;font-size:18px;transition:all .2s}
-.mute-cbtn:hover{background:rgba(255,255,255,.2)}
 
-.no-news{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#050512;color:#333;text-align:center;z-index:5}
-.no-news .ni{font-size:60px;margin-bottom:14px}
-.no-news h2{font-size:18px;margin-bottom:6px;color:#444}
-.no-news p{font-size:13px}
-.no-news a{color:#e63946;text-decoration:none;font-weight:700}
+.cbtn.active{
+  background:rgba(230,57,70,.3);
+  border-color:#e63946;color:#ff8888;
+}
 
-/* ===== START OVERLAY ===== */
-.start-overlay{
+.icon-btn{
+  background:rgba(20,20,40,.85);
+  border:1px solid rgba(255,255,255,.15);
+  color:#fff;width:40px;height:40px;
+  border-radius:8px;cursor:pointer;
+  font-size:18px;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.icon-btn:hover{background:rgba(60,60,100,.9)}
+.icon-btn.active{background:rgba(230,57,70,.3);border-color:#e63946}
+
+/* ── TICKER BOTTOM ── */
+.ticker-bar{
+  background:linear-gradient(90deg,#cc0000,#e63946);
+  padding:0;
+  display:flex;align-items:stretch;
+  flex-shrink:0;height:38px;
+  overflow:hidden;position:relative;
+  z-index:10;
+}
+.ticker-label{
+  background:#fff;color:#cc0000;
+  font-weight:900;font-size:11px;
+  padding:0 16px;letter-spacing:2px;
+  display:flex;align-items:center;
+  flex-shrink:0;white-space:nowrap;
+  z-index:2;
+}
+.ticker-track{
+  flex:1;overflow:hidden;
+  display:flex;align-items:center;
+  position:relative;
+}
+.ticker-content{
+  display:inline-block;
+  white-space:nowrap;
+  font-size:14px;font-weight:600;
+  color:#fff;letter-spacing:.3px;
+  animation:tickerScroll 20s linear infinite;
+  padding-left:100%;
+}
+@keyframes tickerScroll{
+  0%{transform:translateX(0)}
+  100%{transform:translateX(-100%)}
+}
+
+/* ── NO NEWS ── */
+.no-news{
   position:absolute;inset:0;
-  background:rgba(0,0,0,.85);
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
-  z-index:20;
-  backdrop-filter:blur(6px);
+  background:#050512;z-index:5;
+}
+.no-news .ni{font-size:60px;margin-bottom:14px}
+.no-news h2{font-size:18px;color:#444;margin-bottom:6px}
+.no-news p{font-size:13px;color:#333}
+.no-news a{color:#e63946;text-decoration:none;font-weight:700}
+
+/* ── START OVERLAY ── */
+.start-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.9);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:20;backdrop-filter:blur(8px);
   cursor:pointer;
 }
-.start-overlay .so-logo{
+.so-logo{
   background:#e63946;color:#fff;
   font-weight:900;font-size:13px;
-  padding:6px 18px;border-radius:4px;
-  letter-spacing:3px;margin-bottom:24px;
+  padding:6px 20px;border-radius:4px;
+  letter-spacing:3px;margin-bottom:28px;
 }
-.start-overlay h2{
-  font-size:26px;font-weight:800;
-  margin-bottom:10px;color:#fff;
-}
-.start-overlay p{
-  font-size:14px;color:#888;margin-bottom:36px;
-}
+.start-overlay h2{font-size:28px;font-weight:800;margin-bottom:10px}
+.start-overlay p{font-size:14px;color:#666;margin-bottom:40px}
 .start-btn{
   background:linear-gradient(135deg,#e63946,#c62828);
   color:#fff;border:none;
-  padding:16px 48px;border-radius:50px;
-  font-size:18px;font-weight:800;
+  padding:18px 56px;border-radius:50px;
+  font-size:20px;font-weight:800;
   cursor:pointer;letter-spacing:1px;
-  box-shadow:0 8px 32px rgba(230,57,70,.5);
-  transition:all .2s;
+  box-shadow:0 8px 40px rgba(230,57,70,.5);
   animation:pulse 2s infinite;
 }
-.start-btn:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(230,57,70,.7)}
-@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(230,57,70,.5)}50%{box-shadow:0 8px 48px rgba(230,57,70,.8)}}
-.start-overlay .so-hint{
-  margin-top:20px;font-size:12px;color:#444;
-}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(230,57,70,.4)}50%{box-shadow:0 8px 56px rgba(230,57,70,.8)}}
+.start-btn:hover{transform:scale(1.04)}
+.so-hint{margin-top:18px;font-size:12px;color:#333}
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div class="top-bar">
-  <div class="brk-label">BREAKING NEWS</div>
-  <div class="ticker" id="ticker">Loading...</div>
+  <div class="brk-label">BREAKING</div>
+  <div class="channel-name">NEWS LIVE</div>
+  <div class="spacer"></div>
+  <div class="time-display" id="clockDisplay">00:00:00</div>
   <div class="live-pill"><div class="ldot"></div>LIVE</div>
 </div>
 
+<!-- VIDEO AREA -->
 <div class="video-wrap">
   <video id="vid" playsinline></video>
-  <div class="v-overlay"></div>
+  <div class="vignette"></div>
   <div class="watermark">BREAKING NEWS</div>
   <div class="n-indicator" id="nInd">— / —</div>
-  <div class="vc-indicator" id="vcInd">VIDEO 1 / 1</div>
+  <div class="vc-indicator" id="vcInd">VIDEO 1/1</div>
   <div class="tts-pill" id="ttsPill">
     <div class="tts-wave"><div class="tw"></div><div class="tw"></div><div class="tw"></div></div>
-    <span id="ttsLbl">TTS...</span>
+    <span id="ttsLbl">TTS Playing...</span>
   </div>
+  <div class="loop-pill" id="loopPill">🔁 Loop: ON</div>
 
-  <!-- Empty State -->
+  <!-- No News -->
   <div class="no-news" id="noNews" style="display:none">
     <div class="ni">📺</div>
     <h2>Koi News Nahi Mili</h2>
-    <p><a href="admin.html">Admin Panel</a> mein news add karein.</p>
+    <p><a href="admin.html">Admin Panel</a> mein news add karein</p>
   </div>
 
-  <!-- ===== START OVERLAY ===== -->
+  <!-- START OVERLAY -->
   <div class="start-overlay" id="startOverlay" onclick="startBroadcast()">
     <div class="so-logo">BREAKING NEWS</div>
     <h2>📺 Live Broadcast</h2>
-    <p>Video aur TTS shuru karne ke liye click karein</p>
+    <p>Broadcast shuru karne ke liye click karein</p>
     <button class="start-btn">▶ START BROADCAST</button>
-    <div class="so-hint">Broadcast shuru karne ke liye screen par kahi bhi click karein</div>
+    <div class="so-hint">Screen par kahin bhi click karein</div>
   </div>
 
-  <!-- Bottom Controls -->
-  <div class="bottom">
-    <div class="news-box">
-      <div class="nb-label">BREAKING NEWS</div>
-      <div class="nb-text" id="nbText">Loading...</div>
+  <!-- CONTROLS BAR -->
+  <div class="ctrl-bar">
+    <!-- Left: Prev -->
+    <div class="ctrl-group">
+      <button class="cbtn" id="prevBtn" onclick="prevNews()" disabled>◀ PREV</button>
     </div>
-    <div class="ctrl-row">
-      <div class="cg">
-        <button class="cbtn" id="prevBtn" onclick="prevNews()" disabled>◀ PREV</button>
-      </div>
-      <div class="cg">
-        <button class="mute-cbtn" id="muteBtn" onclick="toggleMute()">🔊</button>
-      </div>
-      <div class="cg">
-        <button class="cbtn red" id="nextBtn" onclick="nextNews()">NEXT ▶</button>
-      </div>
+
+    <!-- Center: Audio Controls -->
+    <div class="ctrl-group">
+      <!-- TTS Button -->
+      <button class="icon-btn" id="ttsBtn" onclick="toggleTTS()" title="TTS On/Off">🔊</button>
+      <span style="font-size:11px;color:#555;font-weight:700;">TTS</span>
+
+      <div style="width:1px;height:28px;background:#222;margin:0 6px"></div>
+
+      <!-- Video Mute Button -->
+      <button class="icon-btn" id="vidMuteBtn" onclick="toggleVidMute()" title="Video Audio">🎬</button>
+      <span style="font-size:11px;color:#555;font-weight:700;">VID</span>
+
+      <div style="width:1px;height:28px;background:#222;margin:0 6px"></div>
+
+      <!-- Loop Button -->
+      <button class="icon-btn active" id="loopBtn" onclick="toggleLoop()" title="Loop Videos">🔁</button>
+      <span style="font-size:11px;color:#555;font-weight:700;">LOOP</span>
+
+      <div style="width:1px;height:28px;background:#222;margin:0 6px"></div>
+
+      <!-- Replay TTS -->
+      <button class="cbtn" onclick="replayTTS()" title="TTS Dobara Chalao">↺ TTS</button>
     </div>
+
+    <!-- Right: Next -->
+    <div class="ctrl-group">
+      <button class="cbtn red" id="nextBtn" onclick="nextNews()">NEXT ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER BAR (BOTTOM) -->
+<div class="ticker-bar">
+  <div class="ticker-label">⚡ BREAKING</div>
+  <div class="ticker-track">
+    <div class="ticker-content" id="tickerContent">Loading news...</div>
   </div>
 </div>
 
 <script>
-let items=[], cur=0, vcur=0, muted=false, ttsPlayed=false;
-let synth=window.speechSynthesis;
-let broadcastStarted=false;
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
+let items       = [];
+let cur         = 0;   // current news index
+let vcur        = 0;   // current video index
+let vidMuted    = true;  // video audio — default mute (TTS ke saath conflict na ho)
+let ttsEnabled  = true;  // TTS on/off
+let loopEnabled = true;  // video loop
+let ttsPlayed   = false;
+let broadcastStarted = false;
+let synth       = window.speechSynthesis;
+let currentUtterance = null;
 
-window.onload=()=>{
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+window.onload = () => {
   loadNews();
   setInterval(loadNews, 30000);
+  startClock();
+  updateAllButtons();
 };
 
+function startClock(){
+  function tick(){
+    const now = new Date();
+    document.getElementById('clockDisplay').textContent =
+      now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  }
+  tick(); setInterval(tick, 1000);
+}
+
+// ═══════════════════════════════════════
+//  LOAD NEWS
+// ═══════════════════════════════════════
 function loadNews(){
-  const s=localStorage.getItem('bn_news');
+  const s = localStorage.getItem('bn_news');
   if(s){
-    const d=JSON.parse(s);
+    const d = JSON.parse(s);
     if(d.length){
-      items=d;
-      document.getElementById('noNews').style.display='none';
-      if(cur>=items.length) cur=0;
-      // Sirf UI update karo — play mat karo jab tak START na ho
-      updateTickerAndText();
+      const wasEmpty = !items.length;
+      items = d;
+      document.getElementById('noNews').style.display = 'none';
+      if(cur >= items.length) cur = 0;
+      if(wasEmpty && broadcastStarted) renderCurrent();
+      else if(!broadcastStarted) updateTickerOnly();
       updateNav();
     } else {
-      document.getElementById('noNews').style.display='flex';
+      document.getElementById('noNews').style.display = 'flex';
     }
   } else {
-    document.getElementById('noNews').style.display='flex';
+    document.getElementById('noNews').style.display = 'flex';
   }
 }
 
-function updateTickerAndText(){
+function updateTickerOnly(){
   if(!items.length) return;
-  const it=items[cur];
-  document.getElementById('ticker').textContent=it.text;
-  document.getElementById('nbText').textContent=it.text;
-  document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`;
+  // Ticker mein saari news ek saath
+  const allText = items.map((it,i) => `● NEWS ${i+1}: ${it.text}`).join('      ');
+  const el = document.getElementById('tickerContent');
+  el.textContent = allText;
+  // Speed adjust based on length
+  const duration = Math.max(15, allText.length * 0.09);
+  el.style.animationDuration = duration + 's';
 }
 
-// ===== START BROADCAST — User click ke baad =====
+// ═══════════════════════════════════════
+//  START BROADCAST
+// ═══════════════════════════════════════
 function startBroadcast(){
   if(broadcastStarted) return;
-  broadcastStarted=true;
-
-  // Overlay hatao
-  document.getElementById('startOverlay').style.display='none';
-
+  broadcastStarted = true;
+  document.getElementById('startOverlay').style.display = 'none';
   if(!items.length){
-    document.getElementById('noNews').style.display='flex';
+    document.getElementById('noNews').style.display = 'flex';
     return;
   }
-
   renderCurrent();
 }
 
+// ═══════════════════════════════════════
+//  RENDER CURRENT NEWS
+// ═══════════════════════════════════════
 function renderCurrent(){
   if(!items.length) return;
-  const it=items[cur];
-  vcur=0; ttsPlayed=false;
+  const it = items[cur];
+  vcur = 0;
+  ttsPlayed = false;
 
-  document.getElementById('nInd').textContent=`NEWS ${cur+1} / ${items.length}`;
-  document.getElementById('ticker').textContent=it.text;
-  document.getElementById('nbText').textContent=it.text;
+  // Indicators
+  document.getElementById('nInd').textContent = `NEWS ${cur+1} / ${items.length}`;
   updateNav();
 
-  const vc=document.getElementById('vcInd');
-  if(it.videos.length>1){
-    vc.style.display='block';
-    vc.textContent=`VIDEO 1 / ${it.videos.length}`;
+  // Video counter
+  const vcEl = document.getElementById('vcInd');
+  if(it.videos.length > 1){
+    vcEl.style.display = 'block';
+    vcEl.textContent = `VIDEO 1 / ${it.videos.length}`;
   } else {
-    vc.style.display='none';
+    vcEl.style.display = 'none';
   }
 
+  // Ticker — current news BOLD style (sirf current news ticker mein)
+  updateTicker();
+
+  // Load video
   loadVid(it.videos[0].url);
-  playTTS(it.text);
+
+  // TTS
+  if(ttsEnabled) playTTS(it.text);
 }
 
+function updateTicker(){
+  if(!items.length) return;
+  // Saari news ticker mein, current news highlighted
+  const parts = items.map((it,i) => {
+    if(i === cur) return `▶ ${it.text}`;
+    return `● ${it.text}`;
+  });
+  const allText = parts.join('          ');
+  const el = document.getElementById('tickerContent');
+  el.textContent = allText;
+  const duration = Math.max(15, allText.length * 0.085);
+  el.style.animationDuration = duration + 's';
+  // Restart animation
+  el.style.animation = 'none';
+  el.offsetHeight; // reflow
+  el.style.animation = `tickerScroll ${duration}s linear infinite`;
+}
+
+// ═══════════════════════════════════════
+//  VIDEO PLAYER
+// ═══════════════════════════════════════
 function loadVid(url){
-  const v=document.getElementById('vid');
-  v.src=url;
-  v.muted=muted;
+  const v = document.getElementById('vid');
+  v.src = url;
+  v.muted = vidMuted;
   v.load();
-  v.oncanplay=()=>{
-    const p=v.play();
-    if(p!==undefined){
-      p.catch(err=>{
-        console.log('Play blocked:', err);
-        // Muted karke try karo as fallback
-        v.muted=true;
-        v.play().catch(()=>{});
-      });
-    }
+
+  v.oncanplay = () => {
+    v.play().catch(err => {
+      // Fallback — muted play
+      v.muted = true;
+      v.play().catch(()=>{});
+    });
   };
-  v.onended=()=>{
-    const it=items[cur];
-    if(vcur<it.videos.length-1){
-      vcur++;
-      document.getElementById('vcInd').textContent=`VIDEO ${vcur+1} / ${it.videos.length}`;
+
+  v.onended = () => {
+    const it = items[cur];
+    const nextV = vcur + 1;
+
+    if(nextV < it.videos.length){
+      // Agli video is news ki
+      vcur = nextV;
+      document.getElementById('vcInd').textContent = `VIDEO ${vcur+1} / ${it.videos.length}`;
       loadVid(it.videos[vcur].url);
+    } else if(loopEnabled){
+      // Loop — wapas pehli video
+      vcur = 0;
+      if(it.videos.length > 1)
+        document.getElementById('vcInd').textContent = `VIDEO 1 / ${it.videos.length}`;
+      loadVid(it.videos[0].url);
     }
+    // Loop off hai toh ruk jao — user manually next karega
   };
-  v.onerror=(e)=>{
-    console.error('Video error:', e);
-  };
+
+  v.onerror = () => console.error('Video load error:', url);
 }
 
-function toggleMute(){
-  muted=!muted;
-  document.getElementById('vid').muted=muted;
-  document.getElementById('muteBtn').textContent=muted?'🔇':'🔊';
+// ═══════════════════════════════════════
+//  AUDIO CONTROLS
+// ═══════════════════════════════════════
+
+// Video audio toggle
+function toggleVidMute(){
+  vidMuted = !vidMuted;
+  document.getElementById('vid').muted = vidMuted;
+  updateAllButtons();
 }
 
+// TTS on/off toggle
+function toggleTTS(){
+  ttsEnabled = !ttsEnabled;
+  if(!ttsEnabled) stopTTS();
+  updateAllButtons();
+}
+
+// Loop toggle
+function toggleLoop(){
+  loopEnabled = !loopEnabled;
+  document.getElementById('loopPill').textContent = loopEnabled ? '🔁 Loop: ON' : '⏹ Loop: OFF';
+  document.getElementById('loopPill').style.color = loopEnabled ? '#666' : '#e63946';
+  updateAllButtons();
+}
+
+// TTS dobara chalao manually
+function replayTTS(){
+  if(!items.length) return;
+  ttsPlayed = false;
+  playTTS(items[cur].text);
+}
+
+function updateAllButtons(){
+  // Video mute button
+  const vmb = document.getElementById('vidMuteBtn');
+  vmb.textContent = vidMuted ? '🔇' : '🎬';
+  vmb.classList.toggle('active', !vidMuted);
+  vmb.title = vidMuted ? 'Video Audio: OFF (Click to ON)' : 'Video Audio: ON (Click to OFF)';
+
+  // TTS button
+  const tb = document.getElementById('ttsBtn');
+  tb.textContent = ttsEnabled ? '🔊' : '🔕';
+  tb.classList.toggle('active', ttsEnabled);
+  tb.title = ttsEnabled ? 'TTS: ON (Click to OFF)' : 'TTS: OFF (Click to ON)';
+
+  // Loop button
+  const lb = document.getElementById('loopBtn');
+  lb.textContent = loopEnabled ? '🔁' : '⏹';
+  lb.classList.toggle('active', loopEnabled);
+}
+
+// ═══════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════
 function nextNews(){
-  if(cur<items.length-1){
+  if(cur < items.length - 1){
     cur++;
     stopTTS();
     renderCurrent();
@@ -262,7 +557,7 @@ function nextNews(){
 }
 
 function prevNews(){
-  if(cur>0){
+  if(cur > 0){
     cur--;
     stopTTS();
     renderCurrent();
@@ -270,43 +565,61 @@ function prevNews(){
 }
 
 function updateNav(){
-  document.getElementById('prevBtn').disabled=cur===0;
-  document.getElementById('nextBtn').textContent=cur<items.length-1?'NEXT ▶':'END';
+  document.getElementById('prevBtn').disabled = cur === 0;
+  const nb = document.getElementById('nextBtn');
+  nb.textContent = cur < items.length - 1 ? 'NEXT ▶' : 'END ■';
+  nb.disabled = cur >= items.length - 1;
 }
 
+// ═══════════════════════════════════════
+//  TTS
+// ═══════════════════════════════════════
 function detectLang(t){
-  return /[\u0900-\u097F]/.test(t)?'hi-IN':'en-US';
+  return /[\u0900-\u097F]/.test(t) ? 'hi-IN' : 'en-US';
 }
 
 function playTTS(text){
-  if(ttsPlayed||!synth) return;
+  if(!synth || !ttsEnabled) return;
   stopTTS();
+
   setTimeout(()=>{
-    const u=new SpeechSynthesisUtterance(text);
-    u.lang=detectLang(text);
-    u.rate=0.9; u.pitch=1; u.volume=1;
-    const voices=synth.getVoices();
-    const v=voices.find(x=>x.lang===u.lang)||voices.find(x=>x.lang.startsWith(u.lang.split('-')[0]));
-    if(v) u.voice=v;
-    u.onstart=()=>{
-      ttsPlayed=true;
-      const p=document.getElementById('ttsPill');
-      p.style.display='flex';
-      document.getElementById('ttsLbl').textContent=u.lang==='hi-IN'?'Hindi TTS...':'English TTS...';
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang    = detectLang(text);
+    u.rate    = 0.88;
+    u.pitch   = 1;
+    u.volume  = 1;
+
+    // Best voice select karo
+    const voices = synth.getVoices();
+    const match  = voices.find(v => v.lang === u.lang)
+                || voices.find(v => v.lang.startsWith(u.lang.split('-')[0]));
+    if(match) u.voice = match;
+
+    u.onstart = () => {
+      ttsPlayed = true;
+      const p = document.getElementById('ttsPill');
+      p.style.display = 'flex';
+      document.getElementById('ttsLbl').textContent =
+        u.lang === 'hi-IN' ? 'Hindi TTS...' : 'English TTS...';
     };
-    u.onend=()=>document.getElementById('ttsPill').style.display='none';
-    u.onerror=()=>document.getElementById('ttsPill').style.display='none';
+
+    u.onend = u.onerror = () => {
+      document.getElementById('ttsPill').style.display = 'none';
+    };
+
+    currentUtterance = u;
     synth.speak(u);
-    ttsPlayed=true;
-  }, 800);
+    ttsPlayed = true;
+  }, 600);
 }
 
 function stopTTS(){
-  if(synth&&synth.speaking) synth.cancel();
-  document.getElementById('ttsPill').style.display='none';
+  if(synth && synth.speaking) synth.cancel();
+  currentUtterance = null;
+  document.getElementById('ttsPill').style.display = 'none';
 }
 
-if(synth) synth.onvoiceschanged=()=>{};
+if(synth) synth.onvoiceschanged = () => {};
 </script>
 </body>
 </html>
